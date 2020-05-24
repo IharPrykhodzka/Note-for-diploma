@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".PinCode">
+
+    <TextView
+        android:id="@+id/textForPinCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.4"
+        android:text="@string/textPinCode"
+        android:textColor="#000000"
+        android:textSize="35sp"
+        android:layout_marginTop="80dp"/>
+
+
+    <LinearLayout
+        android:id="@+id/placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.3"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:scaleType="center"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/oval1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/shape_for_pin_code"
+            android:scaleType="center"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:scaleType="center"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/oval2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/shape_for_pin_code"
+            android:scaleType="center"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:scaleType="center"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/oval3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/shape_for_pin_code"
+            android:scaleType="center"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:scaleType="center"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/oval4"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/shape_for_pin_code"
+            android:scaleType="center"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:scaleType="center"
+            tools:ignore="ContentDescription" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:id="@+id/numberForPinCode789"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnSeven"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="@string/_7"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/btnEight"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="@string/_8"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/btnNine"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="@string/_9"
+                android:textSize="30sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/numberForPinCode456"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnFour"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="@string/_4"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/btnFive"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="@string/_5"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/btnSix"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="@string/_6"
+                android:textSize="30sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/numberForPinCode123"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnOne"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="@string/_1"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/btnTwo"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="@string/_2"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/btnThree"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="@string/_3"
+                android:textSize="30sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/numberForPinCode0AndDel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btnNull"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/background_light"
+                android:shadowColor="@android:color/background_light" />
+
+            <Button
+                android:id="@+id/btnZero"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="@string/_0"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/btnBackspace"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="@string/_backspace"
+                android:textSize="30sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/textForPinCodeErrors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1.5"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            tools:text="Введите ПИН-код" />
+    </LinearLayout>
+
+</LinearLayout>
