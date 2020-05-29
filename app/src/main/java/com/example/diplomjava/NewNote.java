@@ -8,6 +8,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -47,10 +48,9 @@ public class NewNote extends AppCompatActivity {
         checkBoxDeadLine = findViewById(R.id.checkBoxDeadLine);
         linearLayout = findViewById(R.id.layoutDeadLine);
 
-
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.new_note);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         isCheckedDeadLine();
         dateAndTime = Calendar.getInstance();
@@ -177,6 +177,20 @@ public class NewNote extends AppCompatActivity {
             setInitialDateTime();
         }
     };
+
+    /**
+     * установка стрелки назад в ToolBar с значение кнопки назад
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 
 }
