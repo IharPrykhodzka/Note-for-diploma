@@ -1,13 +1,12 @@
 package com.example.diplomjava;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,8 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.List;
 
-public class NewNote extends AppCompatActivity {
+public class NewNote extends AppCompatActivity implements NotesRepositoryInterface {
 
     Calendar dateAndTime;
     Button btnSetDateAndTime;
@@ -33,6 +33,7 @@ public class NewNote extends AppCompatActivity {
     int intIsChecked = 0;
 
     final static String MY_LOG = "myLog";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,33 +57,9 @@ public class NewNote extends AppCompatActivity {
         dateAndTime = Calendar.getInstance();
         setInitialDateTime();
         setDeadLine();
-        saveDateToSQLite();
-
     }
 
-    /**
-     * Сохраняем данные в базу данных SQLite
-     */
 
-    private void saveDateToSQLite() {
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title = editTitle.getText().toString().trim();
-                String note = editNote.getText().toString().trim();
-                String dateTime = currentDateTime.getText().toString().trim();
-
-                Log.d(MY_LOG, " \n"
-                        +"Заголовок: \n"
-                        + title + "\n"
-                        + "Заметка: \n"
-                        + note + "\n"
-                        + intIsChecked + "\n"
-                        + dateTime + "\n");
-            }
-        });
-    }
 
     /**
      * Устанавливаем наличие DeadLine
@@ -193,4 +170,25 @@ public class NewNote extends AppCompatActivity {
     }
 
 
+
+
+    @Override
+    public NewNote getNoteById(String id) {
+        return null;
+    }
+
+    @Override
+    public List<NewNote> getNotes() {
+        return null;
+    }
+
+    @Override
+    public void saveDateToSQLite(NewNote newNote) {
+
+    }
+
+    @Override
+    public void deleteDateToSQLite(String id) {
+
+    }
 }
