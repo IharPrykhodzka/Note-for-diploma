@@ -3,7 +3,9 @@ package com.example.diplomjava;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class PinCode extends AppCompatActivity implements KeystoreInterface{
+import com.example.diplomjava.Interfaces.KeystoreInterface;
+
+public class PinCode extends AppCompatActivity implements KeystoreInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

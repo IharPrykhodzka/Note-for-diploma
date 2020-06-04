@@ -1,194 +1,58 @@
 package com.example.diplomjava;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TimePicker;
+public class NewNote {
 
-import java.util.Calendar;
-import java.util.List;
+    private String titleNote;
+    private String textNote;
+    private Integer checkDeadLine;
+    private String dateAndTime;
 
-public class NewNote extends AppCompatActivity implements NotesRepositoryInterface {
-
-    Calendar dateAndTime;
-    Button btnSetDateAndTime;
-    EditText editTitle, editNote, currentDateTime;
-    ImageButton btnSave;
-    CheckBox checkBoxDeadLine;
-    Toolbar toolbar;
-    LinearLayout linearLayout;
-    int intIsChecked = 0;
-
-    final static String MY_LOG = "myLog";
-
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_note);
-
-        toolbar = findViewById(R.id.toolbarNewNote);
-        currentDateTime = findViewById(R.id.currentDateTime);
-        btnSetDateAndTime = findViewById(R.id.btnDateAndTime);
-        editNote = findViewById(R.id.editNote);
-        editTitle = findViewById(R.id.editTitle);
-        btnSave = findViewById(R.id.mIBSave);
-        checkBoxDeadLine = findViewById(R.id.checkBoxDeadLine);
-        linearLayout = findViewById(R.id.layoutDeadLine);
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.new_note);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        isCheckedDeadLine();
-        dateAndTime = Calendar.getInstance();
-        setInitialDateTime();
-        setDeadLine();
+    public NewNote(String titleNote, String textNote, Integer checkDeadLine, String dateAndTime) {
+        this.titleNote = titleNote;
+        this.textNote = textNote;
+        this.checkDeadLine = checkDeadLine;
+        this.dateAndTime = dateAndTime;
     }
 
-
-
-    /**
-     * Устанавливаем наличие DeadLine
-     */
-
-    private void isCheckedDeadLine() {
-
-        checkBoxDeadLine.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!checkBoxDeadLine.isChecked()) {
-                    linearLayout.setVisibility(View.GONE);
-                    intIsChecked = 0;
-                } else {
-                    linearLayout.setVisibility(View.VISIBLE);
-                    intIsChecked = 1;
-                }
-            }
-        });
+    public String getTitleNote() {
+        return titleNote;
     }
 
-
-    /**
-     * Кнопка на диологовые окна выбора даты и времени
-     */
-
-    public void setDeadLine() {
-        btnSetDateAndTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setTime();
-                setDate();
-            }
-        });
+    public void setTitleNote(String titleNote) {
+        this.titleNote = titleNote;
     }
 
-
-    /**
-     * отображаем диалоговое окно для выбора даты
-     */
-
-    public void setDate() {
-        new DatePickerDialog(NewNote.this, d,
-                dateAndTime.get(Calendar.YEAR),
-                dateAndTime.get(Calendar.MONTH),
-                dateAndTime.get(Calendar.DAY_OF_MONTH))
-                .show();
+    public String getTextNote() {
+        return textNote;
     }
 
-    /**
-     * отображаем диалоговое окно для выбора времени
-     */
-
-    public void setTime() {
-        new TimePickerDialog(NewNote.this, t,
-                dateAndTime.get(Calendar.HOUR_OF_DAY),
-                dateAndTime.get(Calendar.MINUTE), true)
-                .show();
+    public void setTextNote(String textNote) {
+        this.textNote = textNote;
     }
 
-    /**
-     * установка начальных даты и времени
-     */
-
-    private void setInitialDateTime() {
-
-        currentDateTime.setText(DateFormat.format("dd/MM/yyyy H:m",
-                dateAndTime.getTimeInMillis()));
+    public Integer getCheckDeadLine() {
+        return checkDeadLine;
     }
 
-    /**
-     * установка обработчика выбора времени
-     */
-
-    TimePickerDialog.OnTimeSetListener t = new TimePickerDialog.OnTimeSetListener() {
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            dateAndTime.set(Calendar.MINUTE, minute);
-            setInitialDateTime();
-        }
-    };
-
-    /**
-     * установка обработчика выбора даты
-     */
-
-    DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            dateAndTime.set(Calendar.YEAR, year);
-            dateAndTime.set(Calendar.MONTH, monthOfYear);
-            dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            setInitialDateTime();
-        }
-    };
-
-    /**
-     * установка стрелки назад в ToolBar с значение кнопки назад
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void setCheckDeadLine(Integer checkDeadLine) {
+        this.checkDeadLine = checkDeadLine;
     }
 
+    public String getDateAndTime() {
+        return dateAndTime;
+    }
 
-
-
-    @Override
-    public NewNote getNoteById(String id) {
-        return null;
+    public void setDateAndTime(String dateAndTime) {
+        this.dateAndTime = dateAndTime;
     }
 
     @Override
-    public List<NewNote> getNotes() {
-        return null;
-    }
-
-    @Override
-    public void saveDateToSQLite(NewNote newNote) {
-
-    }
-
-    @Override
-    public void deleteDateToSQLite(String id) {
-
+    public String toString() {
+        return "NewNote{" +
+                "titleNote='" + titleNote + '\'' +
+                ", textNote='" + textNote + '\'' +
+                ", checkDeadLine=" + checkDeadLine +
+                ", dateAndTime='" + dateAndTime + '\'' +
+                '}';
     }
 }

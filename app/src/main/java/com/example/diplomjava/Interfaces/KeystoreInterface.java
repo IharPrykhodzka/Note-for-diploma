@@ -1,4 +1,4 @@
-package com.example.diplomjava;
+package com.example.diplomjava.Interfaces;
 
 public interface KeystoreInterface {
 
