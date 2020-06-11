@@ -37,7 +37,6 @@ public class NoteFromBaseData extends AppCompatActivity implements NotesReposito
     Toolbar toolbar;
     LinearLayout linearLayout;
     Integer intIsChecked = 0;
-    DBHelper dbHelper;
 
     final static String MY_LOG = "myLog";
 
@@ -68,6 +67,7 @@ public class NoteFromBaseData extends AppCompatActivity implements NotesReposito
         setDeadLine();
 
         setBtnSave();
+
     }
 
 
@@ -84,7 +84,12 @@ public class NoteFromBaseData extends AppCompatActivity implements NotesReposito
                 String dateTime = currentDateTime.getText().toString().trim();
 
                 NewNote newNote = new NewNote(title, note, intIsChecked, dateTime);
-                saveDateToSQLite(newNote);
+                Log.d(MY_LOG, newNote.toString());
+
+
+                App.getNoteRepository(newNote).saveDateToSQLite(newNote);
+
+                App.
             }
         });
     }
@@ -212,63 +217,9 @@ public class NoteFromBaseData extends AppCompatActivity implements NotesReposito
 
     @Override
     public void saveDateToSQLite(NewNote newNote) {
-
-        Log.d(MY_LOG, "Вызов NotesRepositoryInterface saveDateToSQLite");
-
-        Log.d(MY_LOG, newNote.toString());
-
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(DBHelper.KEY_TITLE, newNote.getTitleNote());
-        contentValues.put(DBHelper.KEY_NOTE, newNote.getTextNote());
-        contentValues.put(DBHelper.KEY_CHECK_BOX, newNote.getCheckDeadLine());
-        contentValues.put(DBHelper.KEY_DATE_AND_TIME, newNote.getDateAndTime());
-
-
-        database.insert(DBHelper.TABLE_NOTES, null, contentValues);
-
-        dbHelper.close();
-
-        readSQLiteBase();
     }
 
     @Override
     public void deleteDateToSQLite(String id) {
-
-    }
-
-    /**
-     * Читаем из базы данных SQLite
-     * */
-
-    private void readSQLiteBase() {
-
-        Log.d(MY_LOG, "Вызов readSQLiteBase");
-
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-
-        Cursor cursor = database.query(DBHelper.TABLE_NOTES, null, null,
-                            null, null, null, null);
-
-        if (cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
-            int titleIndex = cursor.getColumnIndex(DBHelper.KEY_TITLE);
-            int noteIndex = cursor.getColumnIndex(DBHelper.KEY_NOTE);
-            int checkIndex = cursor.getColumnIndex(DBHelper.KEY_CHECK_BOX);
-            int dateAndTimeIndex = cursor.getColumnIndex(DBHelper.KEY_DATE_AND_TIME);
-            do {
-                Log.d(MY_LOG, "ID = " + cursor.getInt(idIndex) +
-                        ", title = " + cursor.getString(titleIndex) +
-                        ", note = " + cursor.getString(noteIndex) +
-                        ", checkDeadLine = " + cursor.getString(checkIndex) +
-                        ", dateAndTime = " + cursor.getString(dateAndTimeIndex));
-            } while (cursor.moveToNext());
-        } else
-            Log.d(MY_LOG,"0 рядов");
-
-        cursor.close();
-        dbHelper.close();
     }
 }
