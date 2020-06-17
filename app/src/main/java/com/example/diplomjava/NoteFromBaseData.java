@@ -27,7 +27,7 @@ import com.example.diplomjava.Interfaces.NotesRepositoryInterface;
 import java.util.Calendar;
 import java.util.List;
 
-public class NoteFromBaseData extends AppCompatActivity implements NotesRepositoryInterface {
+public class NoteFromBaseData extends AppCompatActivity {
 
     Calendar dateAndTime;
     Button btnSetDateAndTime;
@@ -37,6 +37,7 @@ public class NoteFromBaseData extends AppCompatActivity implements NotesReposito
     Toolbar toolbar;
     LinearLayout linearLayout;
     Integer intIsChecked = 0;
+    DBHelper dbHelper;
 
     final static String MY_LOG = "myLog";
 
@@ -56,6 +57,8 @@ public class NoteFromBaseData extends AppCompatActivity implements NotesReposito
         btnSave = findViewById(R.id.mIBSave);
         checkBoxDeadLine = findViewById(R.id.checkBoxDeadLine);
         linearLayout = findViewById(R.id.layoutDeadLine);
+
+        dbHelper = new DBHelper(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.new_note);
@@ -87,9 +90,8 @@ public class NoteFromBaseData extends AppCompatActivity implements NotesReposito
                 Log.d(MY_LOG, newNote.toString());
 
 
-                App.getNoteRepository(newNote).saveDateToSQLite(newNote);
+                App.getNoteRepository().saveDateToSQLite(newNote);
 
-                App.
             }
         });
     }
@@ -202,24 +204,5 @@ public class NoteFromBaseData extends AppCompatActivity implements NotesReposito
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    public NoteFromBaseData getNoteById(String id) {
-        return null;
-    }
-
-    @Override
-    public List<NoteFromBaseData> getNotes() {
-        return null;
-    }
-
-    @Override
-    public void saveDateToSQLite(NewNote newNote) {
-    }
-
-    @Override
-    public void deleteDateToSQLite(String id) {
     }
 }

@@ -17,6 +17,7 @@ public class DBHelper  extends SQLiteOpenHelper{
     public static final String KEY_DATE_AND_TIME = "timeAndDate";
 
     public DBHelper(Context context) {
+
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
