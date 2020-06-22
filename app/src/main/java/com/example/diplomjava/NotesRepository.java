@@ -12,7 +12,7 @@ import java.util.List;
 
 public class NotesRepository extends AppCompatActivity implements NotesRepositoryInterface {
 
-    DBHelper dbHelper;
+    DBHelper dbHelper = new DBHelper(this);
     final static String MY_LOG = "myLog";
 
     @Override
@@ -27,6 +27,7 @@ public class NotesRepository extends AppCompatActivity implements NotesRepositor
 
     @Override
     public void saveDateToSQLite(NewNote newNote) {
+
 
         Log.d(MY_LOG, "Вызов NotesRepositoryInterface saveDateToSQLite");
 
@@ -49,6 +50,8 @@ public class NotesRepository extends AppCompatActivity implements NotesRepositor
 
     @Override
     public void deleteDateToSQLite(String id) {
+
+
         Log.d(MY_LOG, "Вызов readSQLiteBase");
 
         SQLiteDatabase database = dbHelper.getReadableDatabase();

@@ -37,7 +37,6 @@ public class NoteFromBaseData extends AppCompatActivity {
     Toolbar toolbar;
     LinearLayout linearLayout;
     Integer intIsChecked = 0;
-    DBHelper dbHelper;
 
     final static String MY_LOG = "myLog";
 
@@ -57,8 +56,6 @@ public class NoteFromBaseData extends AppCompatActivity {
         btnSave = findViewById(R.id.mIBSave);
         checkBoxDeadLine = findViewById(R.id.checkBoxDeadLine);
         linearLayout = findViewById(R.id.layoutDeadLine);
-
-        dbHelper = new DBHelper(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.new_note);
