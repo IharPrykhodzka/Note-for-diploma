@@ -1,15 +1,16 @@
 package com.example.diplomjava.Interfaces;
 
+import com.example.diplomjava.DataItems;
 import com.example.diplomjava.NewNote;
-import com.example.diplomjava.NoteFromBaseData;
+import com.example.diplomjava.NewNoteToBaseData;
 
 import java.util.List;
 
 public interface NotesRepositoryInterface {
 
-    NoteFromBaseData getNoteById(String id);
+    DataItems getNoteById(String id);
 
-    List<NoteFromBaseData> getNotes();
+    List<DataItems> getNotes();
 
     void saveDateToSQLite(NewNote newNote);
 

@@ -2,9 +2,6 @@ package com.example.diplomjava;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,13 +18,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
-
-import com.example.diplomjava.Interfaces.NotesRepositoryInterface;
-
 import java.util.Calendar;
-import java.util.List;
 
-public class NoteFromBaseData extends AppCompatActivity {
+public class NewNoteToBaseData extends AppCompatActivity {
 
     Calendar dateAndTime;
     Button btnSetDateAndTime;
@@ -135,7 +128,7 @@ public class NoteFromBaseData extends AppCompatActivity {
      */
 
     public void setDate() {
-        new DatePickerDialog(NoteFromBaseData.this, d,
+        new DatePickerDialog(NewNoteToBaseData.this, d,
                 dateAndTime.get(Calendar.YEAR),
                 dateAndTime.get(Calendar.MONTH),
                 dateAndTime.get(Calendar.DAY_OF_MONTH))
@@ -147,7 +140,7 @@ public class NoteFromBaseData extends AppCompatActivity {
      */
 
     public void setTime() {
-        new TimePickerDialog(NoteFromBaseData.this, t,
+        new TimePickerDialog(NewNoteToBaseData.this, t,
                 dateAndTime.get(Calendar.HOUR_OF_DAY),
                 dateAndTime.get(Calendar.MINUTE), true)
                 .show();

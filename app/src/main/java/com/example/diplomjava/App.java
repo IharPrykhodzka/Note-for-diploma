@@ -18,7 +18,7 @@ public class App extends Application {
         super.onCreate();
         Log.d(MY_LOG, "Создание App");
 
-        noteRepository = new NotesRepository();
+        noteRepository = new NotesRepository(this);
         keystore = new PinCode();
     }
 
