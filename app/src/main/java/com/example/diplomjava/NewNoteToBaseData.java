@@ -2,6 +2,7 @@ package com.example.diplomjava;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -69,21 +70,39 @@ public class NewNoteToBaseData extends AppCompatActivity {
      */
 
     private void setBtnSave() {
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String title = editTitle.getText().toString().trim();
                 String note = editNote.getText().toString().trim();
-                String dateTime = currentDateTime.getText().toString().trim();
+                String dateTime;
+                if (checkBoxDeadLine.isChecked()) {
+                    dateTime = currentDateTime.getText().toString().trim();
+                }else {
+                    dateTime = null;
+                }
 
                 NewNote newNote = new NewNote(title, note, intIsChecked, dateTime);
                 Log.d(MY_LOG, newNote.toString());
 
 
                 App.getNoteRepository().saveDateToSQLite(newNote);
+                saveOrNot();
+                finish();
 
             }
         });
+    }
+
+    /**
+     * Передал в MainActivity сигнал о рестарте активити
+     */
+
+    private void saveOrNot() {
+            Intent intent = new Intent();
+            intent.putExtra("name", true);
+            setResult(RESULT_OK, intent);
     }
 
 

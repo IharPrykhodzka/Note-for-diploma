@@ -55,6 +55,15 @@ public class DataItemsAdapter extends BaseAdapter {
             title.setText(model.getTitle_view());
             subTitle.setText(model.getSubTitle_view());
             dateTime.setText(model.getDateTime_view());
+            String checkRedLine = model.getCheckBoxInInteger();
+
+            if (checkRedLine.equals("0")) {
+                dateTime.setVisibility(View.GONE);
+            }else {
+                dateTime.setVisibility(View.VISIBLE);
+            }
+
+
         }
         return currentView;
     }

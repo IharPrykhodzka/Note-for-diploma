@@ -4,11 +4,14 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 import android.util.Log;
+import android.widget.RadioGroup;
 
 import com.example.diplomjava.Interfaces.NotesRepositoryInterface;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class NotesRepository extends AppCompatActivity implements NotesRepositoryInterface {
@@ -39,8 +42,17 @@ public class NotesRepository extends AppCompatActivity implements NotesRepositor
 
         SQLiteDatabase database = dbHelper.getReadableDatabase();
 
+        Calendar dateAndTime = Calendar.getInstance();
+        String sDateAndTime = String.valueOf(DateFormat.format("dd/MM/yyyy HH:mm",
+                dateAndTime.getTimeInMillis()));
+
+//        String selection = "timeAndDate > ?";
+//        String[] selectionArgs = new String[]{sDateAndTime};
+
+        String orderBy = "timeAndDate";
+
         Cursor cursor = database.query(DBHelper.TABLE_NOTES, null, null,
-                null, null, null, null);
+                null, null, null, orderBy);
 
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
@@ -61,7 +73,6 @@ public class NotesRepository extends AppCompatActivity implements NotesRepositor
 
         return list;
     }
-
 
 
     @Override
@@ -111,7 +122,6 @@ public class NotesRepository extends AppCompatActivity implements NotesRepositor
     }
 
 
-
     private DataItems point(String id) {
 
         SQLiteDatabase database = dbHelper.getReadableDatabase();
@@ -134,11 +144,10 @@ public class NotesRepository extends AppCompatActivity implements NotesRepositor
                     ", checkDeadLine = " + cursor.getString(checkIndex) +
                     ", dateAndTime = " + cursor.getString(dateAndTimeIndex));
 
-
             dataItems = new DataItems(cursor.getString(titleIndex), cursor.getString(noteIndex),
                     cursor.getString(dateAndTimeIndex), cursor.getString(checkIndex), String.valueOf(cursor.getInt(idIndex)));
 
-            Log.d(MY_LOG,  "DataItems point " + dataItems.toString());
+            Log.d(MY_LOG, "DataItems point " + dataItems.toString());
 
 
         } else

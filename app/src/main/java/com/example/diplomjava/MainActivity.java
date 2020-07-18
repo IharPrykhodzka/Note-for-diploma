@@ -2,21 +2,19 @@ package com.example.diplomjava;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.diplomjava.App.getNoteRepository;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +30,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        btnSettings();
 
+        fAB();
+
+        initList();
+    }
+
+
+    private void fAB() {
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -41,10 +47,14 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent intentNewNote = new Intent(MainActivity.this, NewNoteToBaseData.class);
-                startActivity(intentNewNote);
+                startActivityForResult(intentNewNote, 1);
+
+
             }
         });
+    }
 
+    private void btnSettings() {
         ImageButton btnSettings = findViewById(R.id.mIVSetting);
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,9 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intentSettings);
             }
         });
-
-        initList();
     }
+
 
     private void initList() {
         final ListView listView = findViewById(R.id.listView);
@@ -110,7 +119,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            recreate();
+        } else {
+            Toast.makeText(this, "Wrong result", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
+
+
