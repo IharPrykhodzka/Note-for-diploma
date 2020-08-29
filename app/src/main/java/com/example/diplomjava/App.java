@@ -9,15 +9,16 @@ import com.example.diplomjava.Interfaces.NotesRepositoryInterface;
 public class App extends Application {
 
     final static String MY_LOG = "myLog";
-    private static NotesRepositoryInterface noteRepository;
+    private static NotesRepository noteRepository;
     private static KeystoreInterface keystore;
+    private static NotesRepository notesRepository;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d(MY_LOG, "Создание App");
 
-        noteRepository = new NoteFromBaseData();
+        noteRepository = new NotesRepository(this);
         keystore = new PinCode();
     }
 
