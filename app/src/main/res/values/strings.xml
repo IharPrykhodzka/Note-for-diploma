@@ -19,5 +19,9 @@
     <string name="edit_title">Заголовок</string>
     <string name="edit_text_note">Тело заметки</string>
     <string name="edit_text_dead_line">Крайний срок</string>
+    <string name="toast_error_date">Введите правильно дату и время</string>
+    <string name="toast_error_delete">Ошибка удаления</string>
+    <string name="toast_error_save">Ошибка сохранения</string>
+    <string name="toast_error_wrong_result">Отрицательный результат</string>
 
 </resources>

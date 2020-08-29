@@ -1,7 +1,9 @@
 package com.example.diplomjava;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         fAB();
 
         initList();
+
+
     }
 
 
@@ -67,54 +72,55 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initList() {
-        final ListView listView = findViewById(R.id.listView);
-        List<DataItems> dataItemsList = App.getNoteRepository().getNotes();
+         ListView listView = findViewById(R.id.listView);
+         final List<DataItems> dataItemsList = App.getNoteRepository().getNotes();
 
 
         final DataItemsAdapter dataItemsAdapter = new DataItemsAdapter(dataItemsList, this);
         listView.setAdapter(dataItemsAdapter);
 
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                Object object = dataItemsList.get(position);
-//                String massage = object.toString();
-//
-//
-//                switch (massage) {
-//                    case "Записная книжка":
-//                        Intent intentNotes = new Intent(MainActivity.this, NotesActivity.class);
-//                        startActivity(intentNotes);
-//                        break;
-//                    case "Календарь":
-//                        Intent intentCalendar = new Intent(MainActivity.this, CalendarActivity.class);
-//                        startActivity(intentCalendar);
-//                        break;
-//                    case "Адресс":
-//                        Intent intentAddress = new Intent(MainActivity.this, AddressActivity.class);
-//                        startActivity(intentAddress);
-//                        break;
-//                    case "Настройки":
-//                        Toast.makeText(MainActivity.this, R.string.txtOpenSettings, Toast.LENGTH_LONG).show();
-//                        break;
-//                }
-//            }
-//        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//
-//                Object object = dataItemsList.get(position);
-//                String massage = object.toString();
-//
-//                Toast.makeText(MainActivity.this, massage, Toast.LENGTH_LONG).show();
-//
-//                return false;
-//            }
-//        });
+                DataItems clickCard = dataItemsList.get(position);
+
+                String idCard = clickCard.getId();
+                String titleCard = clickCard.getTitle_view();
+                String textCard = clickCard.getSubTitle_view();
+                String deadLineCard = clickCard.getCheckBoxInInteger();
+                String dateAndTimeCard = clickCard.getDateTime_view();
+
+                Intent intentNewNote = new Intent(MainActivity.this, NewNoteToBaseData.class);
+
+                intentNewNote.putExtra("idCard", idCard);
+                intentNewNote.putExtra("titleCard", titleCard);
+                intentNewNote.putExtra("textCard", textCard);
+                intentNewNote.putExtra("deadLineCard", deadLineCard);
+                intentNewNote.putExtra("dateAndTimeCard", dateAndTimeCard);
+                startActivityForResult(intentNewNote, 1);
+
+                Toast.makeText(MainActivity.this, clickCard.getId(), Toast.LENGTH_SHORT).show();
+                dataItemsAdapter.notifyDataSetChanged();
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                DataItems clickCard = dataItemsList.get(position);
+                String idCard = clickCard.getId();
+                Toast.makeText(MainActivity.this, idCard + " " + position, Toast.LENGTH_SHORT).show();
+                App.getNoteRepository().deleteDateToSQLite(idCard);
+
+                dataItemsList.remove(position);
+                dataItemsAdapter.notifyDataSetChanged();
+
+                return false;
+            }
+        });
 
 
     }
@@ -125,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             recreate();
         } else {
-            Toast.makeText(this, "Wrong result", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_error_wrong_result, Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -19,13 +19,19 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.santalu.maskedittext.MaskEditText;
+
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class NewNoteToBaseData extends AppCompatActivity {
 
     Calendar dateAndTime;
     Button btnSetDateAndTime;
-    EditText editTitle, editNote, currentDateTime;
+    EditText editTitle, editNote;
+    MaskEditText currentDateTime;
     ImageButton btnSave;
     CheckBox checkBoxDeadLine;
     Toolbar toolbar;
@@ -59,8 +65,9 @@ public class NewNoteToBaseData extends AppCompatActivity {
         dateAndTime = Calendar.getInstance();
         setInitialDateTime();
         setDeadLine();
-
-        setBtnSave();
+        Intent intent = getIntent();
+        openCardFromSQL(intent);
+        setBtnSave(intent);
 
     }
 
@@ -69,28 +76,99 @@ public class NewNoteToBaseData extends AppCompatActivity {
      * Кнопка сохранения в SQL
      */
 
-    private void setBtnSave() {
+    private void setBtnSave(final Intent intent) {
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String title = editTitle.getText().toString().trim();
                 String note = editNote.getText().toString().trim();
-                String dateTime;
+                String dateTime = null;
+                Calendar calendar = Calendar.getInstance();
+
+
+                String[] inPairs = new String[5];
+
                 if (checkBoxDeadLine.isChecked()) {
-                    dateTime = currentDateTime.getText().toString().trim();
-                }else {
+
+                    Log.d(MY_LOG, "1Текст для массива" + currentDateTime.getRawText());
+
+                    String text = currentDateTime.getRawText();
+
+                    Log.d(MY_LOG, "2Текст для массива" + text);
+
+                    int longText = text.length();
+                    int check = 0;
+
+                    try {
+                        for (int i = 0; i < longText; i += 2) {
+
+                            char ch = text.charAt(i);
+                            char ch2 = text.charAt(i + 1);
+                            String letter = Character.toString(ch);
+                            String letter2 = Character.toString(ch2);
+
+                            Log.d(MY_LOG, "3Текст для массива" + letter);
+
+                            inPairs[check] = letter + letter2;
+                            check += 1;
+
+                            Log.d(MY_LOG, "5Массив значений" + Arrays.toString(inPairs));
+                        }
+                    } catch (StringIndexOutOfBoundsException e) {
+                        Toast.makeText(NewNoteToBaseData.this, "Заполните строку",
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                    int year = Integer.parseInt("20" + inPairs[2]);
+                    int month = Integer.parseInt(inPairs[1]);
+                    int day = Integer.parseInt(inPairs[0]);
+                    int hour = Integer.parseInt(inPairs[3]);
+                    int minutes = Integer.parseInt(inPairs[4]);
+
+                    if (forCalendar(month, year, day, hour, minutes)) {
+                        calendar.set(year, month - 1, day, hour, minutes);
+                        Log.d(MY_LOG, "Календарь " + DateFormat.format("dd/MM/yy HH:mm",
+                                calendar.getTimeInMillis()));
+                        long millis = calendar.getTimeInMillis();
+                        dateTime = String.valueOf(millis);
+
+                        NewNote newNote = new NewNote(title, note, intIsChecked, dateTime);
+                        Log.d(MY_LOG, newNote.toString());
+
+                        if (intent.getStringExtra("idCard") == null) {
+                            App.getNoteRepository().saveDateToSQLite(newNote);
+
+                        } else {
+                            App.getNoteRepository().updateDateToSQLite(intent.getStringExtra("idCard"), newNote);
+                        }
+
+                        saveOrNot();
+                        finish();
+                    } else {
+                        Toast.makeText(NewNoteToBaseData.this, R.string.toast_error_date,
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                } else {
                     dateTime = null;
+
+                    NewNote newNote = new NewNote(title, note, intIsChecked, dateTime);
+                    Log.d(MY_LOG, newNote.toString());
+
+                    if (intent.getStringExtra("idCard") == null) {
+                        App.getNoteRepository().saveDateToSQLite(newNote);
+                        Log.d(MY_LOG, "сохронена новая запись");
+                    } else {
+                        App.getNoteRepository().updateDateToSQLite(intent.getStringExtra("idCard"), newNote);
+                        Log.d(MY_LOG, "отредактированно");
+                    }
+
+                    saveOrNot();
+                    finish();
+                    recreate();
                 }
-
-                NewNote newNote = new NewNote(title, note, intIsChecked, dateTime);
-                Log.d(MY_LOG, newNote.toString());
-
-
-                App.getNoteRepository().saveDateToSQLite(newNote);
-                saveOrNot();
-                finish();
-
             }
         });
     }
@@ -100,9 +178,9 @@ public class NewNoteToBaseData extends AppCompatActivity {
      */
 
     private void saveOrNot() {
-            Intent intent = new Intent();
-            intent.putExtra("name", true);
-            setResult(RESULT_OK, intent);
+        Intent intent = new Intent();
+        intent.putExtra("name", true);
+        setResult(RESULT_OK, intent);
     }
 
 
@@ -171,7 +249,7 @@ public class NewNoteToBaseData extends AppCompatActivity {
 
     private void setInitialDateTime() {
 
-        currentDateTime.setText(DateFormat.format("dd/MM/yyyy HH:mm",
+        currentDateTime.setText(DateFormat.format("dd/MM/yy HH:mm",
                 dateAndTime.getTimeInMillis()));
     }
 
@@ -200,6 +278,7 @@ public class NewNoteToBaseData extends AppCompatActivity {
         }
     };
 
+
     /**
      * установка стрелки назад в ToolBar с значение кнопки назад
      */
@@ -213,5 +292,80 @@ public class NewNoteToBaseData extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * проверка високостного года
+     */
+
+    public static int leapYear(int month, int year) {
+        int daysInMonth;
+        if (month == 4 || month == 6 || month == 9 || month == 11) {
+            daysInMonth = 30;
+        } else if (month == 2) {
+            daysInMonth = (year % 4 == 0) ? 29 : 28;
+        } else {
+            daysInMonth = 31;
+        }
+        return daysInMonth;
+    }
+
+    /**
+     * проверка правельности ввода даты и времени
+     */
+
+    public static boolean forCalendar(int month, int year, int days, int hour, int minutes) {
+        int daysInMonth = leapYear(month, year);
+        if (2020 >= year & year <= 2200) {
+            Log.d(MY_LOG, "year - true");
+            if (0 >= month & month <= 11) {
+                Log.d(MY_LOG, "month - true");
+                if (0 >= days & days <= daysInMonth) {
+                    Log.d(MY_LOG, "days - true");
+                    if (0 >= hour & hour <= 23) {
+                        Log.d(MY_LOG, "hour - true");
+                        if (0 >= minutes & minutes <= 59) {
+                            Log.d(MY_LOG, "minutes - true");
+                            return true;
+
+                        }
+                    }
+                }
+            }
+        } else {
+            Log.d(MY_LOG, "forCalendar - false" + "\n" + daysInMonth + "\n" + month + "\n" + year + "\n" + days + "\n" + hour + "\n" + minutes);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * открытие карточки для редактирования
+     */
+
+    public void openCardFromSQL(Intent intent) {
+
+        String idCard = intent.getStringExtra("idCard");
+        String titleCard = intent.getStringExtra("titleCard");
+        String textCard = intent.getStringExtra("textCard");
+        String deadLineCard = intent.getStringExtra("deadLineCard");
+        String dateAndTimeCard = intent.getStringExtra("dateAndTimeCard");
+
+        if (idCard != null) {
+            editNote.setText(textCard);
+            editTitle.setText(titleCard);
+            assert deadLineCard != null;
+            if (deadLineCard.equals("1")) {
+                checkBoxDeadLine.setChecked(true);
+                if (dateAndTimeCard != null) {
+                    Log.d(MY_LOG, dateAndTimeCard);
+                    currentDateTime.setText(DateFormat.format("dd/MM/yy HH:mm",
+                            Long.parseLong(dateAndTimeCard)));
+                }
+            } else {
+                checkBoxDeadLine.setChecked(false);
+            }
+        }
     }
 }

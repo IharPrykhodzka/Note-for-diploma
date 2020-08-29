@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface NotesRepositoryInterface {
 
-    DataItems getNoteById(String id);
-
     List<DataItems> getNotes();
 
     void saveDateToSQLite(NewNote newNote);
+
+    void updateDateToSQLite(String id, NewNote newNote);
 
     void deleteDateToSQLite(String id);
 

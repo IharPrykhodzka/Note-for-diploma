@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.diplomjava.Interfaces.NotesRepositoryInterface;
 
@@ -26,14 +26,6 @@ public class NotesRepository extends AppCompatActivity implements NotesRepositor
     final static String MY_LOG = "myLog";
 
     @Override
-    public DataItems getNoteById(String id) {
-
-        Log.d(MY_LOG, "Вызов DataItems getNoteById");
-
-        return point(id);
-    }
-
-    @Override
     public List<DataItems> getNotes() {
 
         Log.d(MY_LOG, "Вызов List<DataItems> getNotes");
@@ -43,13 +35,11 @@ public class NotesRepository extends AppCompatActivity implements NotesRepositor
         SQLiteDatabase database = dbHelper.getReadableDatabase();
 
         Calendar dateAndTime = Calendar.getInstance();
+
         String sDateAndTime = String.valueOf(DateFormat.format("dd/MM/yyyy HH:mm",
                 dateAndTime.getTimeInMillis()));
 
-//        String selection = "timeAndDate > ?";
-//        String[] selectionArgs = new String[]{sDateAndTime};
-
-        String orderBy = "timeAndDate";
+        String orderBy = "checkBoxInInteger DESC, timeAndDate ASC";
 
         Cursor cursor = database.query(DBHelper.TABLE_NOTES, null, null,
                 null, null, null, orderBy);
@@ -78,7 +68,6 @@ public class NotesRepository extends AppCompatActivity implements NotesRepositor
     @Override
     public void saveDateToSQLite(NewNote newNote) {
 
-
         Log.d(MY_LOG, "Вызов saveDateToSQLite");
 
         Log.d(MY_LOG, newNote.toString() + "\n" + dbHelper.toString());
@@ -101,24 +90,42 @@ public class NotesRepository extends AppCompatActivity implements NotesRepositor
     }
 
     @Override
+    public void updateDateToSQLite(String id, NewNote newNote) {
+
+        if (id.equalsIgnoreCase("")){
+            Toast.makeText(this, R.string.toast_error_save, Toast.LENGTH_LONG).show();
+        }
+
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(DBHelper.KEY_TITLE, newNote.getTitleNote());
+        contentValues.put(DBHelper.KEY_NOTE, newNote.getTextNote());
+        contentValues.put(DBHelper.KEY_CHECK_BOX, newNote.getCheckDeadLine());
+        contentValues.put(DBHelper.KEY_DATE_AND_TIME, newNote.getDateAndTime());
+
+        int updCount = database.update(DBHelper.TABLE_NOTES, contentValues, DBHelper.KEY_ID + "= ?", new String[] {id});
+
+        Log.d(MY_LOG, "updates сохранения = " + updCount);
+    }
+
+    @Override
     public void deleteDateToSQLite(String id) {
 
 
-        Log.d(MY_LOG, "Вызов deleteDateToSQLite");
+        if (id.equalsIgnoreCase("")){
+            Toast.makeText(this, R.string.toast_error_delete, Toast.LENGTH_LONG).show();
+        }else {
 
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
+            SQLiteDatabase database = dbHelper.getReadableDatabase();
 
-        Cursor cursor = database.query(DBHelper.TABLE_NOTES, null, null,
-                null, null, null, null);
+            int delCount = database.delete(DBHelper.TABLE_NOTES, DBHelper.KEY_ID + "=" + id, null);
 
-        if (cursor.move(Integer.parseInt(id))) {
-            int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
-            database.delete(DBHelper.TABLE_NOTES, String.valueOf(idIndex), null);
-        } else
-            Log.d(MY_LOG, "нечего удалать");
+            Log.d(MY_LOG, "deleted = " + delCount);
 
-        cursor.close();
-        dbHelper.close();
+            dbHelper.close();
+        }
     }
 
 
