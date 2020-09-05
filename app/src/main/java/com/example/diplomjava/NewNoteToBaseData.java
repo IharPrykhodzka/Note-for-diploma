@@ -20,9 +20,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.santalu.maskedittext.MaskEditText;
-
 import java.util.Arrays;
 import java.util.Calendar;
 

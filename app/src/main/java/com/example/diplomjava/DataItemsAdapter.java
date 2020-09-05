@@ -2,6 +2,7 @@ package com.example.diplomjava;
 
 import android.content.Context;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ public class DataItemsAdapter extends BaseAdapter {
 
     private List<DataItems> dataItems;
     private LayoutInflater inflater;
+    final static String MY_LOG = "myLog";
 
     public DataItemsAdapter(List<DataItems> dataItems, Context context) {
         this.dataItems = dataItems;
@@ -59,8 +61,21 @@ public class DataItemsAdapter extends BaseAdapter {
             title.setText(dataItems.getTitle_view());
             subTitle.setText(dataItems.getSubTitle_view());
 
+
+
+            long timeInMillis = 0;
+            try {
+                timeInMillis = Long.parseLong(dataItems.getDateTime_view());
+                Log.d(MY_LOG, "число для даты = " + timeInMillis);
+            } catch (NumberFormatException e) {
+                Log.d(MY_LOG, "число для даты 2 = " + timeInMillis);
+            }
+
+
+
+
             if (dataItems.getDateTime_view() != null ) {
-                calendar.setTimeInMillis(Long.parseLong(dataItems.getDateTime_view()));
+                calendar.setTimeInMillis(timeInMillis);
                 dateTime.setText(DateFormat.format("dd/MM/yy HH:mm", calendar.getTimeInMillis()));
             }else {
                 dateTime.setText(dataItems.getDateTime_view());

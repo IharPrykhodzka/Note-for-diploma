@@ -32,12 +32,15 @@
         android:layout_marginEnd="20dp">
 
         <EditText
+            android:id="@+id/editPinCod"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
-            android:inputType="numberPassword"/>
+            android:inputType="numberPassword"
+            android:maxLength="4"/>
 
         <Button
+            android:id="@+id/btnVisiblePinCod"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="0.15"
@@ -46,6 +49,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnSavePinCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"

@@ -13,7 +13,7 @@
     <string name="_9">9</string>
     <string name="_backspace">←</string>
     <string name="action_settings">Настройки</string>
-    <string name="settings_text_enter">Введите новый ПИН-код:</string>
+    <string name="settings_text_enter">Введите новый ПИН-код 4 цифры:</string>
     <string name="save">Сохранить</string>
     <string name="new_note">Новая заметка</string>
     <string name="edit_title">Заголовок</string>
@@ -23,5 +23,7 @@
     <string name="toast_error_delete">Ошибка удаления</string>
     <string name="toast_error_save">Ошибка сохранения</string>
     <string name="toast_error_wrong_result">Отрицательный результат</string>
+    <string name="toast_error_wrong_save_pin">ПИН код должен состоять из 4 цифр</string>
+    <string name="toast_save_pin">ПИН код сохранён</string>
 
 </resources>

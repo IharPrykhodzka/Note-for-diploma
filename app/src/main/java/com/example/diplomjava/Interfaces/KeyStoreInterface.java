@@ -1,6 +1,6 @@
 package com.example.diplomjava.Interfaces;
 
-public interface KeystoreInterface {
+public interface KeyStoreInterface {
 
     boolean hasPin();
     boolean checkPin(String pin);
