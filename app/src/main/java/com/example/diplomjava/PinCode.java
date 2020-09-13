@@ -1,19 +1,21 @@
 package com.example.diplomjava;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PinCode extends AppCompatActivity {
 
     Button number1, number2, number3, number4, number5, number6,
             number7, number8, number9, number0, backSpace;
     TextView txtMassage;
+    ImageView oval1, oval2, oval3, oval4;
     ArrayList<String> editPinCode = new ArrayList<String>();
 
     @Override
@@ -34,6 +36,10 @@ public class PinCode extends AppCompatActivity {
         number9 = findViewById(R.id.btnNine);
         backSpace = findViewById(R.id.btnBackspace);
         txtMassage = findViewById(R.id.txtMassage);
+        oval1 = findViewById(R.id.oval1);
+        oval2 = findViewById(R.id.oval2);
+        oval3 = findViewById(R.id.oval3);
+        oval4 = findViewById(R.id.oval4);
 
         checkPinCode();
 
@@ -111,30 +117,62 @@ public class PinCode extends AppCompatActivity {
             }
         });
 
+        backSpace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (editPinCode.size() == 3) {
+                    editPinCode.remove(2);
+                    oval3.setBackgroundResource(R.drawable.shape_for_pin_code);
+                } else if (editPinCode.size() == 2) {
+                    editPinCode.remove(1);
+                    oval2.setBackgroundResource(R.drawable.shape_for_pin_code);
+                } else if (editPinCode.size() == 1) {
+                    editPinCode.remove(0);
+                    oval1.setBackgroundResource(R.drawable.shape_for_pin_code);
+                }
+            }
+        });
+
     }
 
     public void checkOnly4(String someNumber) {
-        if (editPinCode.get(0) == null) {
+        if (editPinCode.isEmpty()) {
             editPinCode.add(someNumber);
-        }else if (editPinCode.get(1) == null) {
+            oval1.setBackgroundResource(R.drawable.shape_for_pin_code_uses);
+        } else if (editPinCode.size() == 1) {
             editPinCode.add(someNumber);
-        }else if (editPinCode.get(2) == null) {
+            oval2.setBackgroundResource(R.drawable.shape_for_pin_code_uses);
+        } else if (editPinCode.size() == 2) {
             editPinCode.add(someNumber);
-        }else if (editPinCode.get(3) == null) {
+            oval3.setBackgroundResource(R.drawable.shape_for_pin_code_uses);
+        } else if (editPinCode.size() == 3) {
             editPinCode.add(someNumber);
-        }else {
+            oval4.setBackgroundResource(R.drawable.shape_for_pin_code_uses);
 
             StringBuilder pin = new StringBuilder();
             for (String s : editPinCode) {
                 pin.append(s);
             }
             if (App.getKeystore().checkPin(pin.toString())) {
-                finish();
-            }else {
-                txtMassage.setText(R.string.txt_wrong_pin);
-                editPinCode.clear();
-            }
+                cleanEditPin();
+                Intent intent = new Intent();
+                intent.putExtra("PIN", true);
+                setResult(RESULT_OK, intent);
 
+
+                finish();
+            } else {
+                txtMassage.setText(R.string.txt_wrong_pin);
+                cleanEditPin();
+            }
         }
+    }
+
+    public void cleanEditPin() {
+        editPinCode.clear();
+        oval1.setBackgroundResource(R.drawable.shape_for_pin_code);
+        oval2.setBackgroundResource(R.drawable.shape_for_pin_code);
+        oval3.setBackgroundResource(R.drawable.shape_for_pin_code);
+        oval4.setBackgroundResource(R.drawable.shape_for_pin_code);
     }
 }

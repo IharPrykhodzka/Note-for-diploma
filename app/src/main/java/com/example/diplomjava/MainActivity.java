@@ -1,9 +1,9 @@
 package com.example.diplomjava;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,11 +22,18 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     final static String MY_LOG = "myLog";
+    private final static int REQUEST_CODE_NEW_NOTE_TOBD = 1;
+    private final static int REQUEST_CODE_PIN_CODE = 2;
+    boolean pinIsTrue = false;
+    boolean pinIsTrue2 = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkFirstStart();
 
         Log.d(MY_LOG, "Создание MainActivity");
 
@@ -52,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent intentNewNote = new Intent(MainActivity.this, NewNoteToBaseData.class);
-                startActivityForResult(intentNewNote, 1);
+                startActivityForResult(intentNewNote, REQUEST_CODE_NEW_NOTE_TOBD);
 
 
             }
@@ -72,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initList() {
-         ListView listView = findViewById(R.id.listView);
-         final List<DataItems> dataItemsList = App.getNoteRepository().getNotes();
+        ListView listView = findViewById(R.id.listView);
+        final List<DataItems> dataItemsList = App.getNoteRepository().getNotes();
 
 
         final DataItemsAdapter dataItemsAdapter = new DataItemsAdapter(dataItemsList, this);
@@ -98,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 intentNewNote.putExtra("textCard", textCard);
                 intentNewNote.putExtra("deadLineCard", deadLineCard);
                 intentNewNote.putExtra("dateAndTimeCard", dateAndTimeCard);
-                startActivityForResult(intentNewNote, 1);
+                startActivityForResult(intentNewNote, REQUEST_CODE_NEW_NOTE_TOBD);
 
                 Toast.makeText(MainActivity.this, clickCard.getId(), Toast.LENGTH_SHORT).show();
                 dataItemsAdapter.notifyDataSetChanged();
@@ -129,9 +136,59 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            recreate();
+            switch (requestCode) {
+                case REQUEST_CODE_NEW_NOTE_TOBD:
+                    ListView listView = findViewById(R.id.listView);
+                    final List<DataItems> dataItemsList = App.getNoteRepository().getNotes();
+                    final DataItemsAdapter dataItemsAdapter = new DataItemsAdapter(dataItemsList, this);
+                    listView.setAdapter(dataItemsAdapter);
+                    break;
+                case REQUEST_CODE_PIN_CODE:
+                    assert data != null;
+                    pinIsTrue = data.getBooleanExtra("PIN", false);
+                    Log.d(MY_LOG, "pinIsTrue = " + String.valueOf(pinIsTrue));
+                    break;
+            }
         } else {
-            Toast.makeText(this, R.string.toast_error_wrong_result, Toast.LENGTH_SHORT).show();
+            switch (requestCode) {
+                case REQUEST_CODE_NEW_NOTE_TOBD:
+                    Toast.makeText(this, R.string.toast_error_wrong_result, Toast.LENGTH_SHORT).show();
+                    break;
+                case REQUEST_CODE_PIN_CODE:
+                    Toast.makeText(this, R.string.toast_error_wrong_result, Toast.LENGTH_SHORT).show();
+                    finish();
+                    break;
+            }
+        }
+    }
+
+
+    private void checkFirstStart() {
+
+        if (!pinIsTrue2) {
+
+            SharedPreferences sp = getSharedPreferences("hasVisited",
+                    Context.MODE_PRIVATE);
+            boolean hasVisited = sp.getBoolean("hasVisited", false);
+
+            if (!hasVisited) {
+                SharedPreferences.Editor e = sp.edit();
+                e.putBoolean("hasVisited", true);
+                e.apply();
+
+                Intent intentSettings = new Intent(MainActivity.this, Settings.class);
+                startActivity(intentSettings);
+
+            } else if (App.getKeystore().hasPin()) {
+                Intent intentPinCode = new Intent(MainActivity.this, PinCode.class);
+                startActivityForResult(intentPinCode, REQUEST_CODE_PIN_CODE);
+                pinIsTrue2 = true;
+
+                if (pinIsTrue) {
+                    Log.d(MY_LOG, "pinIsTrue = " + String.valueOf(pinIsTrue));
+                    Toast.makeText(MainActivity.this, R.string.txt_true_pin, Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 }

@@ -26,5 +26,6 @@
     <string name="toast_error_wrong_save_pin">ПИН-код должен состоять из 4 цифр</string>
     <string name="toast_save_pin">ПИН-код сохранён</string>
     <string name="txt_wrong_pin">Неверный ПИН-код</string>
+    <string name="txt_true_pin">Добро пожаловать!</string>
 
 </resources>
