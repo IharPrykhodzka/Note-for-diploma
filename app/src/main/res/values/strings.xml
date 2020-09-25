@@ -20,6 +20,7 @@
     <string name="edit_text_note">Тело заметки</string>
     <string name="edit_text_dead_line">Крайний срок</string>
     <string name="toast_error_date">Введите правильно дату и время</string>
+    <string name="toast_error_need_text">Заполните все строки</string>
     <string name="toast_error_delete">Ошибка удаления</string>
     <string name="toast_error_save">Ошибка сохранения</string>
     <string name="toast_error_wrong_result">Отрицательный результат</string>
@@ -27,5 +28,12 @@
     <string name="toast_save_pin">ПИН-код сохранён</string>
     <string name="txt_wrong_pin">Неверный ПИН-код</string>
     <string name="txt_true_pin">Добро пожаловать!</string>
+
+    <string name="delete_data">Удалить заметку?</string>
+    <string name="delete">Удаление</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="deleted">Удалено</string>
+    <string name="negative">Отмена</string>
 
 </resources>

@@ -1,6 +1,9 @@
 package com.example.diplomjava;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkFirstStart();
+        if (savedInstanceState == null) {
+            checkFirstStart();
+        }
 
         Log.d(MY_LOG, "Создание MainActivity");
 
@@ -114,22 +119,42 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                DataItems clickCard = dataItemsList.get(position);
-                String idCard = clickCard.getId();
-                Toast.makeText(MainActivity.this, idCard + " " + position, Toast.LENGTH_SHORT).show();
-                App.getNoteRepository().deleteDateToSQLite(idCard);
+                        switch (which) {
+                            case Dialog.BUTTON_POSITIVE:
+                                DataItems clickCard = dataItemsList.get(position);
+                                String idCard = clickCard.getId();
+                                Toast.makeText(MainActivity.this, idCard + " " + position, Toast.LENGTH_SHORT).show();
+                                App.getNoteRepository().deleteDateToSQLite(idCard);
 
-                dataItemsList.remove(position);
-                dataItemsAdapter.notifyDataSetChanged();
+                                dataItemsList.remove(position);
+                                dataItemsAdapter.notifyDataSetChanged();
+
+                                Toast.makeText(MainActivity.this, R.string.deleted, Toast.LENGTH_SHORT).show();
+                                break;
+                            case Dialog.BUTTON_NEGATIVE:
+                                Toast.makeText(MainActivity.this, R.string.negative, Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder adb = new AlertDialog.Builder(view.getContext());
+                adb.setTitle(R.string.delete);
+                adb.setMessage(R.string.delete_data);
+                adb.setIcon(android.R.drawable.ic_dialog_info);
+                adb.setPositiveButton(R.string.yes, dialogClickListener);
+                adb.setNegativeButton(R.string.no, dialogClickListener);
+                adb.show();
 
                 return false;
             }
         });
-
-
     }
 
     @Override
@@ -139,9 +164,14 @@ public class MainActivity extends AppCompatActivity {
             switch (requestCode) {
                 case REQUEST_CODE_NEW_NOTE_TOBD:
                     ListView listView = findViewById(R.id.listView);
-                    final List<DataItems> dataItemsList = App.getNoteRepository().getNotes();
-                    final DataItemsAdapter dataItemsAdapter = new DataItemsAdapter(dataItemsList, this);
+                    List<DataItems> dataItemsList = App.getNoteRepository().getNotes();
+                    DataItemsAdapter dataItemsAdapter = new DataItemsAdapter(dataItemsList, this);
                     listView.setAdapter(dataItemsAdapter);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isPin", true);
+                    Intent in = new Intent(MainActivity.this, MainActivity.class);
+                    in.putExtras(bundle);
+                    recreate();
                     break;
                 case REQUEST_CODE_PIN_CODE:
                     assert data != null;

@@ -76,16 +76,15 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <com.santalu.maskedittext.MaskEditText
+                <TextView
                     android:id="@+id/currentDateTime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="0.85"
-                    android:hint="@string/edit_text_dead_line"
-                    android:inputType="number"
-                    android:digits="0123456789"
-                    app:met_mask="##/##/## ##:##"/>
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:hint="@string/edit_text_dead_line" />
 
                 <Button
                     android:id="@+id/btnDateAndTime"

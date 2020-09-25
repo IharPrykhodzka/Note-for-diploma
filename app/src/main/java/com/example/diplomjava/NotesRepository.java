@@ -108,6 +108,7 @@ public class NotesRepository extends AppCompatActivity implements NotesRepositor
         int updCount = database.update(DBHelper.TABLE_NOTES, contentValues, DBHelper.KEY_ID + "= ?", new String[] {id});
 
         Log.d(MY_LOG, "updates сохранения = " + updCount);
+        dbHelper.close();
     }
 
     @Override

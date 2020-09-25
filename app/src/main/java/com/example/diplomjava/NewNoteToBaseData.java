@@ -18,10 +18,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import com.santalu.maskedittext.MaskEditText;
-import java.util.Arrays;
+
 import java.util.Calendar;
 
 public class NewNoteToBaseData extends AppCompatActivity {
@@ -29,7 +29,7 @@ public class NewNoteToBaseData extends AppCompatActivity {
     Calendar dateAndTime;
     Button btnSetDateAndTime;
     EditText editTitle, editNote;
-    MaskEditText currentDateTime;
+    TextView currentDateTime;
     ImageButton btnSave;
     CheckBox checkBoxDeadLine;
     Toolbar toolbar;
@@ -85,50 +85,17 @@ public class NewNoteToBaseData extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
 
 
-                String[] inPairs = new String[5];
+                if (title.length() != 0 && note.length() != 0) {
 
-                if (checkBoxDeadLine.isChecked()) {
+                    if (checkBoxDeadLine.isChecked()) {
 
-                    Log.d(MY_LOG, "1Текст для массива" + currentDateTime.getRawText());
+                        Log.d(MY_LOG, "1Текст для массива" + currentDateTime.toString());
 
-                    String text = currentDateTime.getRawText();
+                        String text = currentDateTime.toString();
 
-                    Log.d(MY_LOG, "2Текст для массива" + text);
+                        Log.d(MY_LOG, "2Текст для массива" + text);
 
-                    int longText = text.length();
-                    int check = 0;
-
-                    try {
-                        for (int i = 0; i < longText; i += 2) {
-
-                            char ch = text.charAt(i);
-                            char ch2 = text.charAt(i + 1);
-                            String letter = Character.toString(ch);
-                            String letter2 = Character.toString(ch2);
-
-                            Log.d(MY_LOG, "3Текст для массива" + letter);
-
-                            inPairs[check] = letter + letter2;
-                            check += 1;
-
-                            Log.d(MY_LOG, "5Массив значений" + Arrays.toString(inPairs));
-                        }
-                    } catch (StringIndexOutOfBoundsException e) {
-                        Toast.makeText(NewNoteToBaseData.this, "Заполните строку",
-                                Toast.LENGTH_LONG).show();
-                    }
-
-                    int year = Integer.parseInt("20" + inPairs[2]);
-                    int month = Integer.parseInt(inPairs[1]);
-                    int day = Integer.parseInt(inPairs[0]);
-                    int hour = Integer.parseInt(inPairs[3]);
-                    int minutes = Integer.parseInt(inPairs[4]);
-
-                    if (forCalendar(month, year, day, hour, minutes)) {
-                        calendar.set(year, month - 1, day, hour, minutes);
-                        Log.d(MY_LOG, "Календарь " + DateFormat.format("dd/MM/yy HH:mm",
-                                calendar.getTimeInMillis()));
-                        long millis = calendar.getTimeInMillis();
+                        long millis = dateAndTime.getTimeInMillis();
                         dateTime = String.valueOf(millis);
 
                         NewNote newNote = new NewNote(title, note, intIsChecked, dateTime);
@@ -143,29 +110,27 @@ public class NewNoteToBaseData extends AppCompatActivity {
 
                         saveOrNot();
                         finish();
+
                     } else {
-                        Toast.makeText(NewNoteToBaseData.this, R.string.toast_error_date,
-                                Toast.LENGTH_LONG).show();
-                        return;
+                        dateTime = null;
+
+                        NewNote newNote = new NewNote(title, note, intIsChecked, dateTime);
+                        Log.d(MY_LOG, newNote.toString());
+
+                        if (intent.getStringExtra("idCard") == null) {
+                            App.getNoteRepository().saveDateToSQLite(newNote);
+                            Log.d(MY_LOG, "сохронена новая запись");
+                        } else {
+                            App.getNoteRepository().updateDateToSQLite(intent.getStringExtra("idCard"), newNote);
+                            Log.d(MY_LOG, "отредактированно");
+                        }
+
+                        saveOrNot();
+                        finish();
+                        recreate();
                     }
-
-                } else {
-                    dateTime = null;
-
-                    NewNote newNote = new NewNote(title, note, intIsChecked, dateTime);
-                    Log.d(MY_LOG, newNote.toString());
-
-                    if (intent.getStringExtra("idCard") == null) {
-                        App.getNoteRepository().saveDateToSQLite(newNote);
-                        Log.d(MY_LOG, "сохронена новая запись");
-                    } else {
-                        App.getNoteRepository().updateDateToSQLite(intent.getStringExtra("idCard"), newNote);
-                        Log.d(MY_LOG, "отредактированно");
-                    }
-
-                    saveOrNot();
-                    finish();
-                    recreate();
+                }else {
+                    Toast.makeText(NewNoteToBaseData.this, R.string.toast_error_need_text, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -292,51 +257,6 @@ public class NewNoteToBaseData extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * проверка високостного года
-     */
-
-    public static int leapYear(int month, int year) {
-        int daysInMonth;
-        if (month == 4 || month == 6 || month == 9 || month == 11) {
-            daysInMonth = 30;
-        } else if (month == 2) {
-            daysInMonth = (year % 4 == 0) ? 29 : 28;
-        } else {
-            daysInMonth = 31;
-        }
-        return daysInMonth;
-    }
-
-    /**
-     * проверка правельности ввода даты и времени
-     */
-
-    public static boolean forCalendar(int month, int year, int days, int hour, int minutes) {
-        int daysInMonth = leapYear(month, year);
-        if (2020 >= year & year <= 2200) {
-            Log.d(MY_LOG, "year - true");
-            if (0 >= month & month <= 11) {
-                Log.d(MY_LOG, "month - true");
-                if (0 >= days & days <= daysInMonth) {
-                    Log.d(MY_LOG, "days - true");
-                    if (0 >= hour & hour <= 23) {
-                        Log.d(MY_LOG, "hour - true");
-                        if (0 >= minutes & minutes <= 59) {
-                            Log.d(MY_LOG, "minutes - true");
-                            return true;
-
-                        }
-                    }
-                }
-            }
-        } else {
-            Log.d(MY_LOG, "forCalendar - false" + "\n" + daysInMonth + "\n" + month + "\n" + year + "\n" + days + "\n" + hour + "\n" + minutes);
-            return false;
-        }
-
-        return true;
-    }
 
     /**
      * открытие карточки для редактирования
