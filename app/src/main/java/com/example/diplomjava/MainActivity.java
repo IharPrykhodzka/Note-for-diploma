@@ -111,8 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 intentNewNote.putExtra("deadLineCard", deadLineCard);
                 intentNewNote.putExtra("dateAndTimeCard", dateAndTimeCard);
                 startActivityForResult(intentNewNote, REQUEST_CODE_NEW_NOTE_TOBD);
-
-                Toast.makeText(MainActivity.this, clickCard.getId(), Toast.LENGTH_SHORT).show();
+                
                 dataItemsAdapter.notifyDataSetChanged();
             }
         });
