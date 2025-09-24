@@ -2,7 +2,8 @@ package com.example.diplomjava;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.diplomjava.Interfaces.KeyStoreInterface;
